@@ -6,7 +6,7 @@
  * Return:0 on success
  */
 
-int main(int argc, char **argv)
+int main(int ac, char **argv)
 {
         (void)argc,(void)argv;
         char *buf = NULL, *token;
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
                 if(nread==-1)
                 {
                         perror("Exiting the shell");
-                        exit(1);
+                        exit(0);
                 }
                 token = strtok(buf," \n");
                 array = malloc(sizeof(char*) * 1024);
@@ -36,20 +36,20 @@ int main(int argc, char **argv)
                         token = strtok(NULL," \n");
 			i++;
 		}
-		array[i]=NULL;
+		array[i] = NULL;
 		path = get_file_path(array[0]);
 		child_pid = fork();
 		if(child_pid == -1)
 		{
 			perror("Failed to create.");
-			exit(41);
+			exit(51);
 		}
 		if(child_pid == 0)
 		{
 			if(execve(path, array, NULL) == -1)
 			{
 				perror("Failed to execute");
-				exit(97);
+				exit(77);
 			}
 		}
 		else
@@ -58,5 +58,6 @@ int main(int argc, char **argv)
 		}
 	}
 	free(buf);
+	free(path);
         return(0);
 }
