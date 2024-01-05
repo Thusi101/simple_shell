@@ -1,14 +1,17 @@
 #include"main.h"
+
 /**
  * main - To Getline function
+ * @path: Full path variable
  * @ac:Argument count
  * @argv:Array of argument values
+ *
  * Return:0 on success
  */
 
 int main(int ac, char **argv)
 {
-        (void)argc,(void)argv;
+        (void)ac,(void)argv;
         char *buf = NULL, *token;
         size_t count = 0;
         ssize_t nread;
@@ -16,6 +19,7 @@ int main(int ac, char **argv)
         int i;
         int status;
         char **array;
+	char *path;
 
         while(1)
         {

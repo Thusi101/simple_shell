@@ -46,7 +46,7 @@ char *get_file_loc(char *file_name, char *path)
 
 		if (stat(path_buffer, &file_path) == 0 && access(path_buffer, X_OK) == 0)
 		{
-			free(path_copy)
+			free(path_copy);
 				return (path_buffer);
 		}
 		token = strtok(NULL, ":");
@@ -58,13 +58,13 @@ char *get_file_loc(char *file_name, char *path)
 }
 
 /**
- * get_file-path - Obtains full path of file
+ * get_file_path - Obtains full path of file
  * @file_name: Arguemnt name
  *
  * Return: Full path Argument of file
  */
 
-char *get_filepath(char *file_name)
+char *get_file_path(char *file_name)
 {
 	char *path = getenv("PATH");
 	char *full_path;
