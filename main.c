@@ -23,17 +23,18 @@ int main(int ac, char **argv)
 
         while(1)
         {
+		if (isatty(STDIN_FILENO))
                 write(STDOUT_FILENO, "2CShell$ ", 9);
                 
                 nread = getline(&buf, &count, stdin);
-                if(nread==-1)
+                if(nread == -1)
                 {
                         perror("Exiting the shell");
-                        exit(0);
+                        exit(51);
                 }
                 token = strtok(buf," \n");
                 array = malloc(sizeof(char*) * 1024);
-                i=0;
+                i = 0;
                 while (token)
                 {
                         array[i] = token;
@@ -53,7 +54,7 @@ int main(int ac, char **argv)
 			if(execve(path, array, NULL) == -1)
 			{
 				perror("Failed to execute");
-				exit(77);
+				exit(52);
 			}
 		}
 		else

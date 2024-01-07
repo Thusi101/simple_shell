@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-char *get_file_path(char file_name);
+char *get_file_path(char *file_name);
 char *get_file_loc(char *path, char *file_name);
 int startswithfwdslash(const char *str);
 

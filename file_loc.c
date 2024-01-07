@@ -16,7 +16,14 @@ int startswithfwdslash(const char *str)
 		return (1);
 	return (0);
 }
-
+/**
+ * get_file_loc - Gets exec path file
+ * @path: Path variable
+ * @file_name: The exec file
+ * array: Argument array
+ *
+ * Return: Full path to exec files
+ */
 char *get_file_loc(char *file_name, char *path)
 {
 	char *path_copy, *token;
@@ -59,7 +66,8 @@ char *get_file_loc(char *file_name, char *path)
 
 /**
  * get_file_path - Obtains full path of file
- * @file_name: Arguemnt name
+ * @file_name: Argument name
+ *@array: Arguement Array
  *
  * Return: Full path Argument of file
  */
@@ -79,13 +87,15 @@ char *get_file_path(char *file_name)
 		return (NULL);
 	}
 
-	full_path = get_file_loc(path, file_name);
+	full_path = get_file_loc(path, file_name, array);
 	if (full_path == NULL)
 	{
 		write(2, file_name, strlen(file_name));
 		write(2, ": command not found\n", 19);
 		return (NULL);
 	}
+	path = getenv("PATH");
+	printf("PATH: %s\n", path);
 
 	return (full_path);
 }
