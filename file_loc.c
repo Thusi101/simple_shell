@@ -67,7 +67,6 @@ char *get_file_loc(char *file_name, char *path)
 /**
  * get_file_path - Obtains full path of file
  * @file_name: Argument name
- *@array: Arguement Array
  *
  * Return: Full path Argument of file
  */
@@ -87,7 +86,7 @@ char *get_file_path(char *file_name)
 		return (NULL);
 	}
 
-	full_path = get_file_loc(path, file_name, array);
+	full_path = get_file_loc(path, file_name);
 	if (full_path == NULL)
 	{
 		write(2, file_name, strlen(file_name));
