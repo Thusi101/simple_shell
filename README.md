@@ -1,4 +1,4 @@
-Tasks
-0. Betty would be proud
-1. Simple shell 0.1
-2. Simple shell 0.2
+Background Context
+Write a simple UNIX command interpreter.
+
+I, Mothusi Raseroka, am doing this project Solo.
