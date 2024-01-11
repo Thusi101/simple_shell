@@ -34,6 +34,9 @@
 #define HIST_FILE	".simple_shell_history"
 #define HIST_MAX	4096
 
+#define HANDLE_ERROR
+#define HANDLE_ERROR_EXIT
+
 extern char **environ;
 
 
