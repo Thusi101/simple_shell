@@ -24,7 +24,7 @@ int hsh(info_t *info, char **av)
 				HANDLE_ERROR_EXIT("write", EXIT_FAILURE);
 			}
 		}
-		if (write(STDOUT_FILENO, &BUF_FLUSH, 1) == -1)
+		if (write(STDOUT_FILENO, &BUF_FLUSH, "\n", 1) == -1)
 		{
 			HANDLE_ERROR_EXIT("write", EXIT_FAILURE);
 		}
@@ -39,7 +39,7 @@ int hsh(info_t *info, char **av)
 		}
 		else if (interactive(info))
 		{
-			if (write(STDOUT_FILENO, "\n" 1) == -1)
+			if (write(STDOUT_FILENO, "\n", 1) == -1)
 			{
 				HANDLE_ERROR("write");
 			}
@@ -153,11 +153,11 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		HANDLE_ERROR("fork");
+		HANDLE_ERROR("fork", EXIT_FAILURE);
 	}
 	if (child_pid == 0)
 	{
-		if (exeve(info->path, info->argv, get_environ(info)) == -1)
+		if (execve(info->path, info->argv, get_environ(info)) == -1)
 		{
 			free_info(info, 1);
 			if (errno == EACCES)
@@ -174,7 +174,7 @@ void fork_cmd(info_t *info)
 		int status;
 		if (waitpid(child_pid, &status, 0) == -1)
 		{
-			HANDLE_ERROR("waitpid");
+			HANDLE_ERROR("waitpid", EXIT_FAILURE);
 		}
 		if (WIFEXITED(status))
 		{
