@@ -114,7 +114,7 @@ void find_cmd(info_t *info)
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
-			print_error(info, "not found\n");
+			print_error(info, "Command not found\n");
 		}
 	}
 }
@@ -132,29 +132,38 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
-		perror("Error:");
-		return;
+		HANDLE_ERROR("fork");
 	}
 	if (child_pid == 0)
 	{
-		if (execve(info->path, info->argv, get_environ(info)) == -1)
+		if (exeve(info->path, info->argv, get_environ(info)) == -1)
 		{
 			free_info(info, 1);
 			if (errno == EACCES)
+			{
+				print_error(info, "Permission denied\n");
 				exit(126);
+			}
+			print_error(info, "Execution error\n");
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{
-		wait(&(info->status));
-		if (WIFEXITED(info->status))
+		int status;
+		if (waitpid(child_pid, &status, 0) == -1)
 		{
-			info->status = WEXITSTATUS(info->status);
+			HANDLE_ERROR("waitpid");
+		}
+		if (WIFEXITED(status))
+		{
+			info->status = WEXITSTATUS(status);
 			if (info->status == 126)
+			{
 				print_error(info, "Permission denied\n");
+			}
 		}
 	}
+		perror("Error:");
+		return;
 }
