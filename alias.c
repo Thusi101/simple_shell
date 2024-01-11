@@ -18,20 +18,19 @@ int _histlist(info_t *info)
  *
  * Return: Always 0 on success, 1 on error
  */
-int unset_alias(info_t info, char *str)
+int unset_alias(info_t *info, char *str)
 {
-	char *p, c;
+	char *p;
 	int ret;
 
 	p = _strchr(str, '=');
 	if (!p)
 		return (1);
-	c = *p;
-	*p = 0;
 	ret = delete_node_at_index(&(info->alias),
 			get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
 	return (ret);
 }
+
 /**
  * set_alias - makes alias to string
  * @info: parameter struct
@@ -81,13 +80,13 @@ int print_alias(list_t *node)
  * @info: Structure containing potential arguments.
  * Return: Always 0
  */
-int _myalias(info_t * info)
+int _myalias(info_t *info)
 {
 	int i = 0;
 	char *p = NULL;
 	list_t *node = NULL;
 
-	if (info-> argc  == 1)
+	if (info->argc  == 1)
 	{
 		node = info->alias;
 		while (node)
@@ -97,8 +96,7 @@ int _myalias(info_t * info)
 		}
 		return (0);
 	}
-	for (i = 1; info->argv[i];
-			i++)
+	for (i = 1; info->argv[i]; i++)
 	{
 		p = _strchr(info->argv[i], '=');
 		if (p)
