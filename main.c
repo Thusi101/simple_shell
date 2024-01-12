@@ -1,68 +1,44 @@
-#include "main.h"
+#include "shell.h"
 
 /**
- * main - To Getline function
- * @path: Full path variable
- * @ac:Argument count
- * @argv:Array of argument values
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * Return:0 on success
+ * Return: 0 on success, 1 on error
  */
-
-int main(int ac, char **argv)
+int main(int ac, char **av)
 {
-        (void)ac,(void)argv;
-        char *buf = NULL, *token;
-        size_t count = 0;
-        ssize_t nread;
-        pid_t child_pid;
-        int i;
-        int status;
-        char **array;
-	char *path;
+	info_t info[] = { INFO_INIT };
+	int fd = 2;
 
-        while(1)
-        {
-		if (isatty(STDIN_FILENO))
-                write(STDOUT_FILENO, "2CShell$ ", 9);
-                
-                nread = getline(&buf, &count, stdin);
-                if(nread == -1)
-                {
-                        perror("Exiting the shell");
-                        exit(51);
-                }
-                token = strtok(buf," \n");
-                array = malloc(sizeof(char*) * 1024);
-                i = 0;
-                while (token)
-                {
-                        array[i] = token;
-                        token = strtok(NULL," \n");
-			i++;
-		}
-		array[i] = NULL;
-		path = get_file_path(array[0]);
-		child_pid = fork();
-		if(child_pid == -1)
+	asm ("mov %1, %0\n\t"
+		"add $3, %0"
+		: "=r" (fd)
+		: "r" (fd));
+
+	if (ac == 2)
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
 		{
-			perror("Failed to create.");
-			exit(51);
-		}
-		if(child_pid == 0)
-		{
-			if(execve(path, array, NULL) == -1)
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
 			{
-				perror("Failed to execute");
-				exit(52);
+				_eputs(av[0]);
+				_eputs(": 0: Can't open ");
+				_eputs(av[1]);
+				_eputchar('\n');
+				_eputchar(BUF_FLUSH);
+				exit(127);
 			}
+			return (EXIT_FAILURE);
 		}
-		else
-		{
-			wait(&status);
-		}
+		info->readfd = fd;
 	}
-	free(buf);
-	free(path);
-        return(0);
+	populate_env_list(info);
+	read_history(info);
+	hsh(info, av);
+	return (EXIT_SUCCESS);
 }

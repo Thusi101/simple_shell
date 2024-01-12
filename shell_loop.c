@@ -1,6 +1,4 @@
-#include "main.h"
-#define HANDLE_ERROR
-#define HANDLE_ERROR_EXIT
+#include "shell.h"
 
 /**
  * hsh - main shell loop
@@ -18,46 +16,28 @@ int hsh(info_t *info, char **av)
 	{
 		clear_info(info);
 		if (interactive(info))
-		{
-			if (write(STDOUT_FILENO, "$  ", 2) == -1)
-			{
-				HANDLE_ERROR_EXIT("write", EXIT_FAILURE);
-			}
-		}
-		if (write(STDOUT_FILENO, &BUF_FLUSH, "\n", 1) == -1)
-		{
-			HANDLE_ERROR_EXIT("write", EXIT_FAILURE);
-		}
+			_puts("$ ");
+		_eputchar(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
 		{
 			set_info(info, av);
 			builtin_ret = find_builtin(info);
-			if (builtin_ret == -1) {
+			if (builtin_ret == -1)
 				find_cmd(info);
 		}
-		}
 		else if (interactive(info))
-		{
-			if (write(STDOUT_FILENO, "\n", 1) == -1)
-			{
-				HANDLE_ERROR("write");
-			}
-		}
+			_putchar('\n');
 		free_info(info, 0);
 	}
 	write_history(info);
 	free_info(info, 1);
 	if (!interactive(info) && info->status)
-	{
 		exit(info->status);
-	}
 	if (builtin_ret == -2)
 	{
 		if (info->err_num == -1)
-		{
 			exit(info->status);
-		}
 		exit(info->err_num);
 	}
 	return (builtin_ret);
@@ -103,7 +83,6 @@ int find_builtin(info_t *info)
  *
  * Return: void
  */
-
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
@@ -135,7 +114,7 @@ void find_cmd(info_t *info)
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
-			print_error(info, "Command not found\n");
+			print_error(info, "not found\n");
 		}
 	}
 }
@@ -153,7 +132,9 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		HANDLE_ERROR("fork", EXIT_FAILURE);
+		/* TODO: PUT ERROR FUNCTION */
+		perror("Error:");
+		return;
 	}
 	if (child_pid == 0)
 	{
@@ -161,30 +142,19 @@ void fork_cmd(info_t *info)
 		{
 			free_info(info, 1);
 			if (errno == EACCES)
-			{
-				print_error(info, "Permission denied\n");
 				exit(126);
-			}
-			print_error(info, "Execution error\n");
 			exit(1);
 		}
+		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{
-		int status;
-		if (waitpid(child_pid, &status, 0) == -1)
+		wait(&(info->status));
+		if (WIFEXITED(info->status))
 		{
-			HANDLE_ERROR("waitpid", EXIT_FAILURE);
-		}
-		if (WIFEXITED(status))
-		{
-			info->status = WEXITSTATUS(status);
+			info->status = WEXITSTATUS(info->status);
 			if (info->status == 126)
-			{
 				print_error(info, "Permission denied\n");
-			}
 		}
 	}
-		perror("Error:");
-		return;
 }
