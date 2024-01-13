@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * _myhistory - displays the history list, one command by line, preceded
@@ -92,7 +92,7 @@ int _myalias(info_t *info)
 	char *p = NULL;
 	list_t *node = NULL;
 
-	if (info->argc == 1)
+	if (info->ac == 1)
 	{
 		node = info->alias;
 		while (node)

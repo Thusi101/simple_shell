@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * add_node - adds a node to the start of the list
@@ -18,7 +18,7 @@ list_t *add_node(list_t **head, const char *str, int num)
 	if (!new_head)
 		return (NULL);
 	_memset((void *)new_head, 0, sizeof(list_t));
-	new_head->num = num;
+	new_head->numf = num;
 	if (str)
 	{
 		new_head->str = _strdup(str);
@@ -53,7 +53,7 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 	if (!new_node)
 		return (NULL);
 	_memset((void *)new_node, 0, sizeof(list_t));
-	new_node->num = num;
+	new_node->numf = num;
 	if (str)
 	{
 		new_node->str = _strdup(str);

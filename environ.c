@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * _myenv - prints the current environment
@@ -43,7 +43,7 @@ char *_getenv(info_t *info, const char *name)
  */
 int _mysetenv(info_t *info)
 {
-	if (info->argc != 3)
+	if (info->ac != 3)
 	{
 		_eputs("Incorrect number of arguements\n");
 		return (1);
@@ -63,12 +63,12 @@ int _myunsetenv(info_t *info)
 {
 	int i;
 
-	if (info->argc == 1)
+	if (info->ac == 1)
 	{
 		_eputs("Too few arguements.\n");
 		return (1);
 	}
-	for (i = 1; i <= info->argc; i++)
+	for (i = 1; i <= info->ac; i++)
 		_unsetenv(info, info->argv[i]);
 
 	return (0);
