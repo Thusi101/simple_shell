@@ -175,8 +175,8 @@ int _delim_is(char, char *);
 int _alpha(int);
 int _io(char *);
 
-/* toem_errors1.c */
-int _erratoi(char *);
+/* bad1.c */
+int _erraio(char *);
 void print_error(info_t *, char *);
 int print_d(int, int);
 char *convert_number(long int, int, int);
