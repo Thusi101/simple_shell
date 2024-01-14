@@ -1,11 +1,5 @@
-/**
- * Welcome to 2C's Simple Shell headers
- * Let us get creative
- *
- */
-
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#ifndef _MAIN_H_
+#define _MAIN_H_
 
 /* Just the ordinary headers */
 #include <errno.h>
@@ -234,4 +228,4 @@ int replace_alias(info_t *);
 int replace_vars(info_t *);
 int replace_string(char **, char *);
 
-#endif
+#endif /* _MAIN_H_ */
